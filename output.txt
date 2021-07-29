@@ -1,0 +1,49 @@
+SET
+schemaname|tablename|indexname|tablespace|indexdef
+cc_user|books|books_pkey||CREATE UNIQUE INDEX books_pkey ON cc_user.books USING btree (book_id)
+cc_user|books|books_author_idx||CREATE INDEX books_author_idx ON cc_user.books USING btree (author)
+cc_user|books|books_title_idx||CREATE INDEX books_title_idx ON cc_user.books USING btree (title)
+(3 rows)
+QUERY PLAN
+Seq Scan on orders  (cost=0.00..1867.60 rows=30176 width=38) (actual time=0.013..10.332 rows=9982 loops=1)
+  Filter: (quantity > 18)
+  Rows Removed by Filter: 90018
+Planning time: 0.096 ms
+Execution time: 10.709 ms
+(5 rows)
+CREATE INDEX
+QUERY PLAN
+Seq Scan on orders  (cost=0.00..1986.00 rows=33333 width=38) (actual time=0.007..8.077 rows=9982 loops=1)
+  Filter: (quantity > 18)
+  Rows Removed by Filter: 90018
+Planning time: 0.089 ms
+Execution time: 8.459 ms
+(5 rows)
+ALTER TABLE
+QUERY PLAN
+Bitmap Heap Scan on customers  (cost=626.62..2407.29 rows=33333 width=466) (actual time=0.031..0.120 rows=99 loops=1)
+  Recheck Cond: (customer_id < 100)
+  Heap Blocks: exact=99
+  ->  Bitmap Index Scan on customers_pkey  (cost=0.00..618.29 rows=33333 width=0) (actual time=0.018..0.019 rows=99 loops=1)
+        Index Cond: (customer_id < 100)
+Planning time: 0.131 ms
+Execution time: 0.139 ms
+(7 rows)
+CLUSTER
+CREATE INDEX
+CREATE INDEX
+QUERY PLAN
+Seq Scan on orders  (cost=0.00..2486.00 rows=33333 width=38) (actual time=0.009..31.382 rows=68070 loops=1)
+  Filter: (((quantity)::numeric * price_base) > '100'::numeric)
+  Rows Removed by Filter: 31930
+Planning time: 0.140 ms
+Execution time: 34.001 ms
+(5 rows)
+CREATE INDEX
+QUERY PLAN
+Seq Scan on orders  (cost=0.00..2486.00 rows=33333 width=38) (actual time=0.010..30.373 rows=68070 loops=1)
+  Filter: (((quantity)::numeric * price_base) > '100'::numeric)
+  Rows Removed by Filter: 31930
+Planning time: 0.115 ms
+Execution time: 32.950 ms
+(5 rows)
